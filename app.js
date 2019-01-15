@@ -57,13 +57,23 @@ window.onload=function(){
         if (err !== null) {
             alert('Impossible : ' + err);
         } else {
-         //   var pokemons = [];
             for(var i = 0;i < data.length;i++){
                 var li = document.createElement('li');
                 li.setAttribute('class','item');             
                 ul.appendChild(li);
-                var content_li = document.createTextNode(prop_access(data[i],"data.name"));
-                li.appendChild(content_li);   
+                var div = document.createElement('div');
+                li.appendChild(div);
+                var label = document.createElement('label');
+                var image = document.createElement('img');
+                div.appendChild(label);
+                
+                var name = document.createTextNode("Nom : " + prop_access(data[i],"data.name"));
+                image.setAttribute("src", prop_access(data[i],"data.ThumbnailImage"));
+                image.setAttribute("width", "150");
+                image.setAttribute("height", "150");
+                image.setAttribute("alt", prop_access(data[i],"data.name"));
+                label.appendChild(name);
+                div.appendChild(image);
                 
           
             }
