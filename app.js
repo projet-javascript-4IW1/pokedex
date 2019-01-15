@@ -57,18 +57,47 @@ window.onload=function(){
         if (err !== null) {
             alert('Impossible : ' + err);
         } else {
+         //   var pokemons = [];
             for(var i = 0;i < data.length;i++){
                 var li = document.createElement('li');
                 li.setAttribute('class','item');             
                 ul.appendChild(li);
-                var content_li = document.createTextNode(data[i].slug);
-                li.appendChild(content_li);               
+                var content_li = document.createTextNode(prop_access(data[i],"data.name"));
+                li.appendChild(content_li);   
+                
+          
             }
         }
+        
         });
     };
-   
 
+
+   
+    function prop_access(object, path) {
+        if (typeof path != "string"){
+            return object;
+        }
+    
+        if(typeof object != 'object' || object == null) {
+            console.log(path + ' not exist');
+            return;
+        }
+        if (path === null || path === '') {
+            return object;
+        }
+    
+        const props = path.split('.');
+        let property = object;
+        props.forEach(function (prop) {
+            if(!property.hasOwnProperty(prop)) {
+              //  console.log(path + ' not exist');
+                return;
+            }
+            property = property[prop];
+        });
+        return property;
+    }
 
 
     document.getElementsByTagName("input")[0].setAttribute("id", "searchbar");
