@@ -1,3 +1,5 @@
+import {PokeRoutes} from './router.js';
+
 window.onload=function(){
     var titre = document.createElement("h3");
     var content_h3 = document.createTextNode("Bienvenue sur le POKEDECK.");
@@ -9,7 +11,6 @@ window.onload=function(){
     var content_button_afficher = document.createTextNode("Afficher tout les pokemons");
     var br = document.createElement("br");
     var br2 = document.createElement("br");
-
 
     var searchbar = document.createElement("input");
 
@@ -57,9 +58,12 @@ window.onload=function(){
         if (err !== null) {
             alert('Impossible : ' + err);
         } else {
+
+            PokeRoutes.navigate('/pokemons');
+            var onepokemon = [];
             for(var i = 0;i < data.length;i++){
                 var li = document.createElement('li');
-                li.setAttribute('class','item');             
+                li.setAttribute('class','item');            
                 ul.appendChild(li);
                 var div = document.createElement('div');
                 li.appendChild(div);
@@ -70,17 +74,20 @@ window.onload=function(){
                 var name = document.createTextNode("Nom : " + prop_access(data[i],"data.name"));
                 image.setAttribute("src", prop_access(data[i],"data.ThumbnailImage"));
                 image.setAttribute("width", "150");
+                div.setAttribute("id","pokemon-"+i);
+                onepokemon.push(document.getElementById("pokemon-"+i));
+                
                 image.setAttribute("height", "150");
                 image.setAttribute("alt", prop_access(data[i],"data.name"));
                 label.appendChild(name);
-                div.appendChild(image);
-                
-          
+                div.appendChild(image);             
             }
+         
         }
         
         });
     };
+
 
 
    
