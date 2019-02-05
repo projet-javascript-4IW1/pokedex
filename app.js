@@ -1,5 +1,5 @@
 window.onload=function(){
-
+  
         var element;
         var button;
         var button_afficher;
@@ -190,7 +190,15 @@ window.onload=function(){
         ul.setAttribute('id','pokemonList');
         document.getElementById('root').appendChild(ul);
         var criteria = document.getElementById('searchCrit').value;
-        var search = document.getElementById('searchbar').value;
+        var string_verif = type_check_v1(document.getElementById('searchbar').value,"string");
+        if(string_verif){
+            var search = document.getElementById('searchbar').value;
+            if(document.getElementById('alert')){
+                document.getElementById('alert').remove();
+            }
+        } else {
+            document.getElementById("title").insertAfter("<p style='color:red' id='alert'>The search param is not a string</p>");
+        }
 
         getJSON('https://raw.githubusercontent.com/cheeaun/repokemon/master/data/pokemon-list.json',
         function(err, data) {
@@ -201,9 +209,10 @@ window.onload=function(){
          //   var pokemons = [];
             for(var i = 0;i < data.length;i++){
                 var criteriavalidation = false;
-                if((criteria == "type" || criteria == "weakness") && prop_access(data[i],"data."+criteria).indexOf(search) >= 0){
+                var re = new RegExp(tolower(search), 'gi');
+                if((criteria == "type" || criteria == "weakness") && tolower(prop_access(data[i],"data."+criteria)).indexOf(tolower(search)) >= 0){
                     criteriavalidation = true;
-                } else if(criteria == "name" && prop_access(data[i],"data."+criteria) == search) {
+                } else if(criteria == "name" && tolower(prop_access(data[i],"data.name")).match(re)) {
                     criteriavalidation = true;
                 }
                 if(search !== null && criteriavalidation == true){
@@ -270,6 +279,42 @@ window.onload=function(){
         return property;
     }
 
+    function tolower(string) {
+        if (string.length === 0) return string;
+        if (typeof string == "object") {
+            for (var i = 0; i < string.length; i++) {
+                string[i] = string[i].toLowerCase();
+            }
+            return string;
+        }
+        if (typeof string !== "string") return "";
+
+        // array = string.split(" ");
+        return string.toLowerCase();
+    }
+
+    function type_check_v1(data, type) {
+        switch(typeof data) {
+            case "number":
+            case "string":
+            case "boolean":
+            case "undefined":
+            case "function":
+                return type === typeof data;
+            case "object":
+                switch(type) {
+                    case "null":
+                        return data === null;
+                    case "array":
+                        return Array.isArray(data);
+                    default:
+                        return data !== null && !Array.isArray(data);
+                }
+
+        }
+        
+        return false;
+    }
 
   function affichageEventHome(){
     document.getElementsByTagName("input")[0].setAttribute("id", "searchbar");
