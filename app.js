@@ -5,19 +5,24 @@ window.onload=function(){
         var button_afficher;
 
     function affichageHome(){
+        var menu = document.createElement("div");
+        menu.setAttribute("class","menu");
         var titre = document.createElement("h3");
         var img = document.createElement('img');
         img.setAttribute("class","logo");
         img.src = 'img/image.png';
         var content_h3 = document.createTextNode("Bienvenue sur le POKEDECK");
-        var para = document.createElement("p");
-        var content_para = document.createTextNode("Recherchez ci-dessous un POKEMON:");
         button = document.createElement("button");
-        var content_button = document.createTextNode("Rechercher");
         button_afficher = document.createElement("button");
         var content_button_afficher = document.createTextNode("Afficher tout les pokemons");
+        button_afficher.setAttribute("class","style-button");
+        button.setAttribute("class","style-button-search");
         var br = document.createElement("br");
         var br2 = document.createElement("br");
+
+        var div_search = document.createElement("div");
+        div_search.setAttribute("class","div_search");
+        
     
     
         var searchbar = document.createElement("input");
@@ -34,24 +39,23 @@ window.onload=function(){
     
     
         titre.appendChild(content_h3);
-        para.appendChild(content_para);
-        button.appendChild(content_button);
         button_afficher.appendChild(content_button_afficher);
     
         element = document.getElementById("root");
       
         
+        element.appendChild(menu);
     
-    
-        element.appendChild(titre);
-        titre.appendChild(img);
-        element.appendChild(para);
-        element.appendChild(button_afficher);
-        element.appendChild(br);
-        element.appendChild(br2);
-        element.appendChild(searchbar);
-        element.appendChild(selectbar);
-        element.appendChild(button);
+        menu.appendChild(img);
+        menu.appendChild(titre);
+        
+        menu.appendChild(button_afficher);
+        menu.appendChild(br);
+        menu.appendChild(br2);
+        menu.appendChild(div_search);
+        div_search.appendChild(searchbar);
+        div_search.appendChild(selectbar);
+        div_search.appendChild(button);
     };
     affichageHome();
 
@@ -140,7 +144,6 @@ window.onload=function(){
 
 
     var afficherListe = function(){
-        element.innerHTML = '';
         var ul = document.createElement('ul');
         ul.setAttribute('id','pokemonList');           
         document.getElementById('root').appendChild(ul); 
@@ -173,6 +176,7 @@ window.onload=function(){
                 createCard(pokemon);
               })
             });
+           
         }
         
         });
