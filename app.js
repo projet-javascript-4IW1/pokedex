@@ -58,7 +58,64 @@ window.onload=function(){
         xhr.send();
     };
 
+
+    function createTextEl(tagName, text){
+      const el = document.createElement(tagName);
+      const txt = document.createTextNode(text);
+      el.appendChild(txt);
+      return el;
+    }
+
+    function appendChilds(parent, childs) {
+      childs.forEach(c => { parent.appendChild(c) });
+      return parent;
+    }
+
+
+    function createCard(pokemon) {
+        element.innerHTML = '';
+        const card = document.createElement('div');
+        card.classList.add('card');
+        const abilities = pokemon['abilities'].join(' - ');
+        const types = pokemon['type'].join(' - ');
+        const weakness = pokemon['weakness'].join(' - ');
+
+        const img = document.createElement('img');
+        img.setAttribute('src', pokemon['ThumbnailImage']);
+
+        const h1 = document.createTextNode(`${pokemon['name']} - #${pokemon['number']}`);
+        const infoWrap = document.createElement('div');
+        infoWrap.style.display = 'flex';
+        infoWrap.style.flexDirection = 'column';
+        const abilitiesText = createTextEl('p', `Abilities : ${abilities}`);
+        const heightText = createTextEl('p',`Height : ${pokemon['height']}`);
+        const weightText = createTextEl('p', `Weight : ${pokemon['weight']}`);
+        const typesText = createTextEl('p',`Types : ${types}`);
+        const weaknessText = createTextEl('p', `Weakness : ${weakness}`);
+
+        card.appendChild(h1);
+        card.appendChild(img);
+        appendChilds(infoWrap, [abilitiesText, heightText, weightText, typesText, weaknessText]);
+        card.appendChild(infoWrap);
+        element.appendChild(card);
+    }
+
+    function getInfo(id) {
+      return new Promise((resolve, reject) => {
+        getJSON('https://raw.githubusercontent.com/cheeaun/repokemon/master/data/pokemon-list.json', (err, data) => {
+          if (data) {
+            resolve(data.filter((pokemon) => { return pokemon["id"] === id })[0]);
+          }
+          if (err) {
+            reject(new Error('Pokemon non dispo'));
+          }
+        })
+      });
+    }
+
+
     var afficherListe = function(){
+        element.innerHTML = '';
         var ul = document.createElement('ul');
         ul.setAttribute('id','pokemonList');           
         document.getElementById('root').appendChild(ul); 
@@ -68,26 +125,29 @@ window.onload=function(){
         if (err !== null) {
             alert('Impossible : ' + err);
         } else {
-            for(var i = 0;i < data.length;i++){
-                var li = document.createElement('li');
-                li.setAttribute('class','item');             
-                ul.appendChild(li);
-                var div = document.createElement('div');
-                li.appendChild(div);
-                var label = document.createElement('label');
-                var image = document.createElement('img');
-                div.appendChild(label);
-                
-                var name = document.createTextNode("Nom : " + prop_access(data[i],"data.name"));
-                image.setAttribute("src", prop_access(data[i],"data.ThumbnailImage"));
-                image.setAttribute("width", "150");
-                image.setAttribute("height", "150");
-                image.setAttribute("alt", prop_access(data[i],"data.name"));
-                label.appendChild(name);
-                div.appendChild(image);
-                
-          
-            }
+            data.forEach( pokemon => {
+              const li = document.createElement('li');
+              li.setAttribute('class','item');
+              ul.appendChild(li);
+              const div = document.createElement('div');
+              li.appendChild(div);
+              const label = document.createElement('label');
+              const image = document.createElement('img');
+              div.appendChild(label);
+
+              const name = document.createTextNode("Nom : " + prop_access(pokemon,"data.name"));
+              image.setAttribute("src", prop_access(pokemon,"data.ThumbnailImage"));
+              image.setAttribute("width", "150");
+              image.setAttribute("height", "150");
+              image.setAttribute("alt", prop_access(pokemon,"data.name"));
+              label.appendChild(name);
+              div.appendChild(image);
+              li.addEventListener('click', function (e) {
+                e.preventDefault();
+                history.pushState(pokemon['id'], '', `/${pokemon['id']}/${pokemon['name']}`);
+                createCard(pokemon);
+              })
+            });
         }
         
         });
@@ -143,6 +203,18 @@ window.onload=function(){
     };
 
 
+    window.onpopstate = (e) => {
+      console.log(e.state);
+      if(e.state === null) {
+        location.href = '/';
+      }
+      if(e.state === 'all'){
+        afficherListe();
+      }
+      else {
+        getInfo(e.state).then(result => createCard(result) , reject => new Error(reject))
+      }
+    };
    
     function prop_access(object, path) {
         if (typeof path != "string"){
@@ -174,10 +246,11 @@ window.onload=function(){
     document.getElementById("searchbar").placeholder = "Rechercher...";
 
     button_afficher.addEventListener("click", function(){
-        afficherListe();
-      });
+      history.pushState('all', '', '/all');
+      afficherListe();
+    });
     button.addEventListener("click", function(){
         searchListe();
-      });
+    });
 
 };
