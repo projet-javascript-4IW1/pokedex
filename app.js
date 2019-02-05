@@ -1,48 +1,60 @@
 window.onload=function(){
-    var titre = document.createElement("h3");
-    var content_h3 = document.createTextNode("Bienvenue sur le POKEDECK.");
-    content_h3.id = "title";
-    var para = document.createElement("p");
-    var content_para = document.createTextNode("Recherchez ci-dessous un POKEMON:");
-    var button = document.createElement("button");
-    var content_button = document.createTextNode("Rechercher");
-    var button_afficher = document.createElement("button");
-    var content_button_afficher = document.createTextNode("Afficher tout les pokemons");
-    var br = document.createElement("br");
-    var br2 = document.createElement("br");
-
-
-    var searchbar = document.createElement("input");
-    var selectbar = document.createElement("select");
-    selectbar.id = "searchCrit";
-
-    var list = ["name","type","weakness"];
-    for (var i = 0; i < list.length; i++) {
-        var option = document.createElement("option");
-        option.value = list[i];
-        option.text = list[i];
-        selectbar.appendChild(option);
-    }
-
-
-    titre.appendChild(content_h3);
-    para.appendChild(content_para);
-    button.appendChild(content_button);
-    button_afficher.appendChild(content_button_afficher);
-
-    var element = document.getElementById("root");
   
+        var element;
+        var button;
+        var button_afficher;
+
+    function affichageHome(){
+        var titre = document.createElement("h3");
+        var img = document.createElement('img');
+        img.setAttribute("class","logo");
+        img.src = 'img/image.png';
+        var content_h3 = document.createTextNode("Bienvenue sur le POKEDECK");
+        content_h3.id = "title";
+        var para = document.createElement("p");
+        var content_para = document.createTextNode("Recherchez ci-dessous un POKEMON:");
+        button = document.createElement("button");
+        var content_button = document.createTextNode("Rechercher");
+        button_afficher = document.createElement("button");
+        var content_button_afficher = document.createTextNode("Afficher tout les pokemons");
+        var br = document.createElement("br");
+        var br2 = document.createElement("br");
     
-
-
-    element.appendChild(titre);
-    element.appendChild(para);
-    element.appendChild(button_afficher);
-    element.appendChild(br);
-    element.appendChild(br2);
-    element.appendChild(searchbar);
-    element.appendChild(selectbar);
-    element.appendChild(button);
+    
+        var searchbar = document.createElement("input");
+        var selectbar = document.createElement("select");
+        selectbar.id = "searchCrit";
+    
+        var list = ["name","type","weakness"];
+        for (var i = 0; i < list.length; i++) {
+            var option = document.createElement("option");
+            option.value = list[i];
+            option.text = list[i];
+            selectbar.appendChild(option);
+        }
+    
+    
+        titre.appendChild(content_h3);
+        para.appendChild(content_para);
+        button.appendChild(content_button);
+        button_afficher.appendChild(content_button_afficher);
+    
+        element = document.getElementById("root");
+      
+        
+    
+    
+        element.appendChild(titre);
+        titre.appendChild(img);
+        element.appendChild(para);
+        element.appendChild(button_afficher);
+        element.appendChild(br);
+        element.appendChild(br2);
+        element.appendChild(searchbar);
+        element.appendChild(selectbar);
+        element.appendChild(button);
+    };
+    affichageHome();
 
     var getJSON = function(url, callback) {
         var xhr = new XMLHttpRequest();
@@ -80,6 +92,8 @@ window.onload=function(){
         const abilities = pokemon['abilities'].join(' - ');
         const types = pokemon['type'].join(' - ');
         const weakness = pokemon['weakness'].join(' - ');
+        var button_retour = document.createElement("button");
+        var content_button_retour = document.createTextNode("Retour");
 
         const img = document.createElement('img');
         img.setAttribute('src', pokemon['ThumbnailImage']);
@@ -98,7 +112,18 @@ window.onload=function(){
         card.appendChild(img);
         appendChilds(infoWrap, [abilitiesText, heightText, weightText, typesText, weaknessText]);
         card.appendChild(infoWrap);
+        button_retour.appendChild(content_button_retour);
+        element.appendChild(button_retour);
         element.appendChild(card);
+
+        button_retour.addEventListener("click", function(){
+            history.pushState('', '', '/');
+            card.remove();
+            button_retour.remove();
+            affichageHome();
+            affichageEventHome();
+        });
+        
     }
 
     function getInfo(id) {
@@ -288,6 +313,7 @@ window.onload=function(){
         return false;
     }
 
+  function affichageEventHome(){
     document.getElementsByTagName("input")[0].setAttribute("id", "searchbar");
     document.getElementById("searchbar").placeholder = "Rechercher...";
 
@@ -298,5 +324,7 @@ window.onload=function(){
     button.addEventListener("click", function(){
         searchListe();
     });
+  };
+  affichageEventHome();
 
 };
