@@ -172,9 +172,9 @@ window.onload=function(){
          //   var pokemons = [];
             for(var i = 0;i < data.length;i++){
                 var criteriavalidation = false;
-                if((criteria == "type" || criteria == "weakness") && prop_access(data[i],"data."+criteria).indexOf(search) >= 0){
+                if((criteria == "type" || criteria == "weakness") && tolower(prop_access(data[i],"data."+criteria)).indexOf(tolower(search)) >= 0){
                     criteriavalidation = true;
-                } else if(criteria == "name" && prop_access(data[i],"data."+criteria) == search) {
+                } else if(criteria == "name" && tolower(prop_access(data[i],"data."+criteria)) == tolower(search)) {
                     criteriavalidation = true;
                 }
                 if(search !== null && criteriavalidation == true){
@@ -241,6 +241,19 @@ window.onload=function(){
         return property;
     }
 
+    function tolower(string) {
+        if (string.length === 0) return string;
+        if (typeof string == "object") {
+            for (var i = 0; i < string.length; i++) {
+                string[i] = string[i].toLowerCase();
+            }
+            return string;
+        }
+        if (typeof string !== "string") return "";
+
+        // array = string.split(" ");
+        return string.toLowerCase();
+    }
 
     document.getElementsByTagName("input")[0].setAttribute("id", "searchbar");
     document.getElementById("searchbar").placeholder = "Rechercher...";
