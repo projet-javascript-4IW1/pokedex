@@ -12,6 +12,16 @@ window.onload=function(){
 
 
     var searchbar = document.createElement("input");
+    var selectbar = document.createElement("select");
+    selectbar.id = "searchCrit";
+
+    var list = ["name","type","weakness"];
+    for (var i = 0; i < list.length; i++) {
+        var option = document.createElement("option");
+        option.value = list[i];
+        option.text = list[i];
+        selectbar.appendChild(option);
+    }
 
 
     titre.appendChild(content_h3);
@@ -30,6 +40,7 @@ window.onload=function(){
     element.appendChild(br);
     element.appendChild(br2);
     element.appendChild(searchbar);
+    element.appendChild(selectbar);
     element.appendChild(button);
 
     var getJSON = function(url, callback) {
@@ -142,6 +153,55 @@ window.onload=function(){
         });
     };
 
+    var searchListe = function(){
+        if(document.getElementById("pokemonList")){
+            document.getElementById("pokemonList").remove();
+        }
+        var ul = document.createElement('ul');
+        ul.setAttribute('id','pokemonList');
+        document.getElementById('root').appendChild(ul);
+        var criteria = document.getElementById('searchCrit').value;
+        var search = document.getElementById('searchbar').value;
+
+        getJSON('https://raw.githubusercontent.com/cheeaun/repokemon/master/data/pokemon-list.json',
+        function(err, data) {
+            console.log(data);
+        if (err !== null) {
+            alert('Impossible : ' + err);
+        } else {
+         //   var pokemons = [];
+            for(var i = 0;i < data.length;i++){
+                var criteriavalidation = false;
+                if((criteria == "type" || criteria == "weakness") && prop_access(data[i],"data."+criteria).indexOf(search) >= 0){
+                    criteriavalidation = true;
+                } else if(criteria == "name" && prop_access(data[i],"data."+criteria) == search) {
+                    criteriavalidation = true;
+                }
+                if(search !== null && criteriavalidation == true){
+                    console.log(true);
+                    var li = document.createElement('li');
+                    li.setAttribute('class','item');             
+                    ul.appendChild(li);
+                    var div = document.createElement('div');
+                    li.appendChild(div);
+                    var label = document.createElement('label');
+                    var image = document.createElement('img');
+                    div.appendChild(label);
+                    
+                    var name = document.createTextNode("Nom : " + prop_access(data[i],"data.name"));
+                    image.setAttribute("src", prop_access(data[i],"data.ThumbnailImage"));
+                    image.setAttribute("width", "150");
+                    image.setAttribute("height", "150");
+                    image.setAttribute("alt", prop_access(data[i],"data.name"));
+                    label.appendChild(name);
+                    div.appendChild(image);
+                }
+            }
+        }
+        
+        });
+    };
+
 
     window.onpopstate = (e) => {
       console.log(e.state);
@@ -189,4 +249,8 @@ window.onload=function(){
       history.pushState('all', '', '/all');
       afficherListe();
     });
+    button.addEventListener("click", function(){
+        searchListe();
+    });
+
 };
