@@ -6,7 +6,10 @@ window.onload=function(){
 
     function affichageHome(){
         var titre = document.createElement("h3");
-        var content_h3 = document.createTextNode("Bienvenue sur le POKEDECK.");
+        var img = document.createElement('img');
+        img.setAttribute("class","logo");
+        img.src = 'img/image.png';
+        var content_h3 = document.createTextNode("Bienvenue sur le POKEDECK");
         var para = document.createElement("p");
         var content_para = document.createTextNode("Recherchez ci-dessous un POKEMON:");
         button = document.createElement("button");
@@ -41,6 +44,7 @@ window.onload=function(){
     
     
         element.appendChild(titre);
+        titre.appendChild(img);
         element.appendChild(para);
         element.appendChild(button_afficher);
         element.appendChild(br);
