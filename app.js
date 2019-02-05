@@ -181,9 +181,10 @@ window.onload=function(){
          //   var pokemons = [];
             for(var i = 0;i < data.length;i++){
                 var criteriavalidation = false;
+                var re = new RegExp(tolower(search), 'gi');
                 if((criteria == "type" || criteria == "weakness") && tolower(prop_access(data[i],"data."+criteria)).indexOf(tolower(search)) >= 0){
                     criteriavalidation = true;
-                } else if(criteria == "name" && tolower(prop_access(data[i],"data."+criteria)) == tolower(search)) {
+                } else if(criteria == "name" && tolower(prop_access(data[i],"data.name")).match(re)) {
                     criteriavalidation = true;
                 }
                 if(search !== null && criteriavalidation == true){
