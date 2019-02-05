@@ -21,7 +21,6 @@ window.onload=function(){
         var br2 = document.createElement("br");
 
         var div_search = document.createElement("div");
-        div_search.setAttribute("class","div_search");
         
     
     

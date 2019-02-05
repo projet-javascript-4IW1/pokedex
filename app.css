@@ -19,7 +19,6 @@ body {
 .logo{
     width: 100px;
     height: 100px;
-margin-left:45%;
 }
 
 label {
@@ -34,6 +33,9 @@ label {
     padding: 15px;
     width:50%;
     margin-left:25%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h3 {
@@ -48,10 +50,6 @@ text-align: center;
     border-radius: 4px;
 }
 
-.div_search {
-
-    margin-left:30%;
-}
 
 #searchbar {
     border:none;
@@ -83,7 +81,6 @@ text-align: center;
 }
 
 .style-button {
-    margin-left:33.5%;
     color: #494949 !important;
     text-transform: uppercase;
     background: transparent;
