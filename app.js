@@ -1,6 +1,7 @@
 window.onload=function(){
     var titre = document.createElement("h3");
     var content_h3 = document.createTextNode("Bienvenue sur le POKEDECK.");
+    content_h3.id = "title";
     var para = document.createElement("p");
     var content_para = document.createTextNode("Recherchez ci-dessous un POKEMON:");
     var button = document.createElement("button");
@@ -161,7 +162,15 @@ window.onload=function(){
         ul.setAttribute('id','pokemonList');
         document.getElementById('root').appendChild(ul);
         var criteria = document.getElementById('searchCrit').value;
-        var search = document.getElementById('searchbar').value;
+        var string_verif = type_check_v1(document.getElementById('searchbar').value,"string");
+        if(string_verif){
+            var search = document.getElementById('searchbar').value;
+            if(document.getElementById('alert')){
+                document.getElementById('alert').remove();
+            }
+        } else {
+            document.getElementById("title").insertAfter("<p style='color:red' id='alert'>The search param is not a string</p>");
+        }
 
         getJSON('https://raw.githubusercontent.com/cheeaun/repokemon/master/data/pokemon-list.json',
         function(err, data) {
@@ -253,6 +262,29 @@ window.onload=function(){
 
         // array = string.split(" ");
         return string.toLowerCase();
+    }
+
+    function type_check_v1(data, type) {
+        switch(typeof data) {
+            case "number":
+            case "string":
+            case "boolean":
+            case "undefined":
+            case "function":
+                return type === typeof data;
+            case "object":
+                switch(type) {
+                    case "null":
+                        return data === null;
+                    case "array":
+                        return Array.isArray(data);
+                    default:
+                        return data !== null && !Array.isArray(data);
+                }
+
+        }
+        
+        return false;
     }
 
     document.getElementsByTagName("input")[0].setAttribute("id", "searchbar");
