@@ -21,3 +21,11 @@ label {
 
     display: block;
 }
+
+
+.card {
+    width: 600px;
+    height: 500px;
+    background-color: #fff;
+    border-radius: 4px;
+}
