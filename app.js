@@ -1,8 +1,8 @@
 window.onload=function(){
   
-        var element;
-        var button;
-        var button_afficher;
+    var element;
+    var button;
+    var button_afficher;
 
     function affichageHome(){
         var menu = document.createElement("div");
@@ -56,7 +56,6 @@ window.onload=function(){
         div_search.appendChild(selectbar);
         div_search.appendChild(button);
     };
-    affichageHome();
 
     var getJSON = function(url, callback) {
         var xhr = new XMLHttpRequest();
@@ -88,7 +87,11 @@ window.onload=function(){
 
 
     function createCard(pokemon) {
-        element.innerHTML = '';
+        if(element){
+          element.innerHTML = '';
+        }
+        element = document.createElement('div');
+        console.log(pokemon);
         const card = document.createElement('div');
         card.classList.add('card');
         const abilities = pokemon['abilities'].join(' - ');
@@ -117,6 +120,9 @@ window.onload=function(){
         button_retour.appendChild(content_button_retour);
         element.appendChild(button_retour);
         element.appendChild(card);
+        
+        const body = document.querySelector('body');
+        body.appendChild(element);
 
         button_retour.addEventListener("click", function(){
             history.pushState('', '', '/');
@@ -129,10 +135,12 @@ window.onload=function(){
     }
 
     function getInfo(id) {
+      id = id.split('/')[1];
+      console.log(id);
       return new Promise((resolve, reject) => {
         getJSON('https://raw.githubusercontent.com/cheeaun/repokemon/master/data/pokemon-list.json', (err, data) => {
           if (data) {
-            resolve(data.filter((pokemon) => { return pokemon["id"] === id })[0]);
+            resolve(data.filter((pokemon) => { return pokemon["id"] == id })[0]);
           }
           if (err) {
             reject(new Error('Pokemon non dispo'));
@@ -171,7 +179,7 @@ window.onload=function(){
               div.appendChild(image);
               li.addEventListener('click', function (e) {
                 e.preventDefault();
-                history.pushState(pokemon['id'], '', `/${pokemon['id']}/${pokemon['name']}`);
+                history.pushState(`/${pokemon['id']}`, '', `/${pokemon['id']}`);
                 createCard(pokemon);
               })
             });
@@ -239,6 +247,20 @@ window.onload=function(){
         });
     };
 
+    const path = location.pathname;
+    switch (path) {
+      case '/':
+        affichageHome();
+        affichageEventHome();
+        break;
+      case '/all':
+        affichageHome();
+        afficherListe();
+        break;
+      default:
+        console.log('here');
+        getInfo(path).then(result => createCard(result) , reject => new Error(reject))
+    }
 
     window.onpopstate = (e) => {
       console.log(e.state);
@@ -327,6 +349,5 @@ window.onload=function(){
         searchListe();
     });
   };
-  affichageEventHome();
 
 };

@@ -2,7 +2,7 @@
 version: '3'
 services:
     server:
-        image: nginx
+        build: 'docker/nginx'
         ports:
             - '8080:80'
         volumes:
