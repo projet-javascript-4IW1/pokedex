@@ -1,4 +1,48 @@
 window.onload=function(){
+
+    function Pokemon(name,abilities,type,weakness,thumbnailImage,number,height,weight){
+        //private properties
+        var name = name ? name : null;
+        var abilities = abilities ? abilities : [];
+        var type = type ? type : [];
+        var weakness = weakness ? weakness : [];
+        var thumbnailImage = thumbnailImage ? thumbnailImage : null;
+        var number = number ? number : null;
+        var height = height ? height : null;
+        var weight = weight ? weight : null;
+
+        this.getName = function(){
+            return name;
+        }
+
+        this.getAbilities = function(){
+            return abilities.join(' - ');
+        }
+
+        this.getType = function(){
+            return type.join(' - ');
+        }
+
+        this.getWeakness = function(){
+            return weakness.join(' - ');
+        }
+
+        this.getThumbnailImage = function(){
+            return thumbnailImage;
+        }
+
+        this.getNumber = function(){
+            return number;
+        }
+
+        this.getHeight = function(){
+            return height;
+        }
+
+        this.getWeight = function(){
+            return weight;
+        }
+    }
   
     var element;
     var button;
@@ -94,24 +138,21 @@ window.onload=function(){
         console.log(pokemon);
         const card = document.createElement('div');
         card.classList.add('card');
-        const abilities = pokemon['abilities'].join(' - ');
-        const types = pokemon['type'].join(' - ');
-        const weakness = pokemon['weakness'].join(' - ');
         var button_retour = document.createElement("button");
         var content_button_retour = document.createTextNode("Retour");
 
         const img = document.createElement('img');
-        img.setAttribute('src', pokemon['ThumbnailImage']);
+        img.setAttribute('src', pokemon.getThumbnailImage());
 
-        const h1 = document.createTextNode(`${pokemon['name']} - #${pokemon['number']}`);
+        const h1 = document.createTextNode(`${pokemon.getName()} - #${pokemon.getNumber()}`);
         const infoWrap = document.createElement('div');
         infoWrap.style.display = 'flex';
         infoWrap.style.flexDirection = 'column';
-        const abilitiesText = createTextEl('p', `Abilities : ${abilities}`);
-        const heightText = createTextEl('p',`Height : ${pokemon['height']}`);
-        const weightText = createTextEl('p', `Weight : ${pokemon['weight']}`);
-        const typesText = createTextEl('p',`Types : ${types}`);
-        const weaknessText = createTextEl('p', `Weakness : ${weakness}`);
+        const abilitiesText = createTextEl('p', `Abilities : ${pokemon.getAbilities()}`);
+        const heightText = createTextEl('p',`Height : ${pokemon.getHeight()}`);
+        const weightText = createTextEl('p', `Weight : ${pokemon.getWeight()}`);
+        const typesText = createTextEl('p',`Types : ${pokemon.getType()}`);
+        const weaknessText = createTextEl('p', `Weakness : ${pokemon.getWeakness()}`);
 
         card.appendChild(h1);
         card.appendChild(img);
@@ -179,8 +220,9 @@ window.onload=function(){
               div.appendChild(image);
               li.addEventListener('click', function (e) {
                 e.preventDefault();
+                var pokemon_obj = new Pokemon(pokemon['name'],pokemon['abilities'],pokemon['type'],pokemon['weakness'],pokemon['ThumbnailImage'],pokemon['number'],pokemon['height'],pokemon['weight']);
                 history.pushState(`/${pokemon['id']}`, '', `/${pokemon['id']}`);
-                createCard(pokemon);
+                createCard(pokemon_obj);
               })
             });
            
@@ -214,34 +256,39 @@ window.onload=function(){
             alert('Impossible : ' + err);
         } else {
          //   var pokemons = [];
-            for(var i = 0;i < data.length;i++){
+            data.forEach( pokemon => {
                 var criteriavalidation = false;
                 var re = new RegExp(tolower(search), 'gi');
-                if((criteria == "type" || criteria == "weakness") && tolower(prop_access(data[i],"data."+criteria)).indexOf(tolower(search)) >= 0){
+                if((criteria == "type" || criteria == "weakness") && tolower(prop_access(pokemon,"data."+criteria)).indexOf(tolower(search)) >= 0){
                     criteriavalidation = true;
-                } else if(criteria == "name" && tolower(prop_access(data[i],"data.name")).match(re)) {
+                } else if(criteria == "name" && tolower(prop_access(pokemon,"data.name")).match(re)) {
                     criteriavalidation = true;
                 }
                 if(search !== null && criteriavalidation == true){
-                    console.log(true);
-                    var li = document.createElement('li');
-                    li.setAttribute('class','item');             
+                    const li = document.createElement('li');
+                    li.setAttribute('class','item');
                     ul.appendChild(li);
-                    var div = document.createElement('div');
+                    const div = document.createElement('div');
                     li.appendChild(div);
-                    var label = document.createElement('label');
-                    var image = document.createElement('img');
+                    const label = document.createElement('label');
+                    const image = document.createElement('img');
                     div.appendChild(label);
-                    
-                    var name = document.createTextNode("Nom : " + prop_access(data[i],"data.name"));
-                    image.setAttribute("src", prop_access(data[i],"data.ThumbnailImage"));
+
+                    const name = document.createTextNode("Nom : " + prop_access(pokemon,"data.name"));
+                    image.setAttribute("src", prop_access(pokemon,"data.ThumbnailImage"));
                     image.setAttribute("width", "150");
                     image.setAttribute("height", "150");
-                    image.setAttribute("alt", prop_access(data[i],"data.name"));
+                    image.setAttribute("alt", prop_access(pokemon,"data.name"));
                     label.appendChild(name);
                     div.appendChild(image);
+                    li.addEventListener('click', function (e) {
+                      e.preventDefault();
+                      var pokemon_obj = new Pokemon(pokemon['name'],pokemon['abilities'],pokemon['type'],pokemon['weakness'],pokemon['ThumbnailImage'],pokemon['number'],pokemon['height'],pokemon['weight']);
+                      history.pushState(`/${pokemon['id']}`, '', `/${pokemon['id']}`);
+                      createCard(pokemon_obj);
+                    });
                 }
-            }
+            });
         }
         
         });
