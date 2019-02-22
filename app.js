@@ -306,7 +306,11 @@ window.onload=function(){
         break;
       default:
         console.log('here');
-        getInfo(path).then(result => createCard(result) , reject => new Error(reject))
+      
+        getInfo(path).then(result => {
+          var pokemon_obj = new Pokemon(result['name'],result['abilities'],result['type'],result['weakness'],result['ThumbnailImage'],result['number'],result['height'],result['weight']);
+          createCard(pokemon_obj);
+        }  , reject => new Error(reject))
     }
 
     window.onpopstate = (e) => {
@@ -318,7 +322,10 @@ window.onload=function(){
         afficherListe();
       }
       else {
-        getInfo(e.state).then(result => createCard(result) , reject => new Error(reject))
+        getInfo(e.state).then(result => {
+          var pokemon_obj = new Pokemon(result['name'],result['abilities'],result['type'],result['weakness'],result['ThumbnailImage'],result['number'],result['height'],result['weight']);
+          createCard(pokemon_obj);
+        } , reject => new Error(reject))
       }
     };
    
