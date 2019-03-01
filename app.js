@@ -268,6 +268,11 @@ window.onload=function(){
       history.pushState('all', '', '/all');
       afficherListe();
     });
+
+      document.getElementById("searchbar").addEventListener("keyup", function(){
+          searchListe();
+      });
+
     document.getElementById("search_button").addEventListener("click", function(){
         searchListe();
     });
