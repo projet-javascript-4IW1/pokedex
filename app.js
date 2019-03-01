@@ -5,14 +5,14 @@ window.onload=function(){
 
     function Pokemon(name,abilities,type,weakness,thumbnailImage,number,height,weight){
         //private properties
-        let name = name ? name : null;
-        let abilities = abilities ? abilities : [];
-        let type = type ? type : [];
-        let weakness = weakness ? weakness : [];
-        let thumbnailImage = thumbnailImage ? thumbnailImage : null;
-        let number = number ? number : null;
-        let height = height ? height : null;
-        let weight = weight ? weight : null;
+        var name = name ? name : null;
+        var abilities = abilities ? abilities : [];
+        var type = type ? type : [];
+        var weakness = weakness ? weakness : [];
+        var thumbnailImage = thumbnailImage ? thumbnailImage : null;
+        var number = number ? number : null;
+        var height = height ? height : null;
+        var weight = weight ? weight : null;
 
         this.getName = function(){
             return name;
