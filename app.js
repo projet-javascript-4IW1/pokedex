@@ -5,14 +5,14 @@ window.onload=function(){
 
     function Pokemon(name,abilities,type,weakness,thumbnailImage,number,height,weight){
         //private properties
-        var name = name ? name : null;
-        var abilities = abilities ? abilities : [];
-        var type = type ? type : [];
-        var weakness = weakness ? weakness : [];
-        var thumbnailImage = thumbnailImage ? thumbnailImage : null;
-        var number = number ? number : null;
-        var height = height ? height : null;
-        var weight = weight ? weight : null;
+        let name = name ? name : null;
+        let abilities = abilities ? abilities : [];
+        let type = type ? type : [];
+        let weakness = weakness ? weakness : [];
+        let thumbnailImage = thumbnailImage ? thumbnailImage : null;
+        let number = number ? number : null;
+        let height = height ? height : null;
+        let weight = weight ? weight : null;
 
         this.getName = function(){
             return name;
@@ -47,9 +47,9 @@ window.onload=function(){
         }
     }
   
-    var element;
-    var button;
-    var button_afficher;
+    let element;
+    let button;
+    let button_afficher;
 
 
  
@@ -58,8 +58,8 @@ window.onload=function(){
 
     
 
-    var afficherListe = function(){
-        var ul = document.createElement('ul');
+    let afficherListe = function(){
+        let ul = document.createElement('ul');
         ul.setAttribute('id','pokemonList');           
         document.getElementById('root').appendChild(ul); 
 
@@ -69,16 +69,16 @@ window.onload=function(){
             alert('Impossible : ' + err);
         } else {
             data.forEach( pokemon => {
-              const li = document.createElement('li');
+              let li = document.createElement('li');
               li.setAttribute('class','item');
               ul.appendChild(li);
-              const div = document.createElement('div');
+              let div = document.createElement('div');
               li.appendChild(div);
-              const label = document.createElement('label');
-              const image = document.createElement('img');
+              let label = document.createElement('label');
+              let image = document.createElement('img');
               div.appendChild(label);
 
-              const name = document.createTextNode("Nom : " + prop_access(pokemon,"data.name"));
+              let name = document.createTextNode("Nom : " + prop_access(pokemon,"data.name"));
               image.setAttribute("src", prop_access(pokemon,"data.ThumbnailImage"));
               image.setAttribute("width", "150");
               image.setAttribute("height", "150");
@@ -87,7 +87,7 @@ window.onload=function(){
               div.appendChild(image);
               li.addEventListener('click', function (e) {
                 e.preventDefault();
-                var pokemon_obj = new Pokemon(pokemon['name'],pokemon['abilities'],pokemon['type'],pokemon['weakness'],pokemon['ThumbnailImage'],pokemon['number'],pokemon['height'],pokemon['weight']);
+                let pokemon_obj = new Pokemon(pokemon['name'],pokemon['abilities'],pokemon['type'],pokemon['weakness'],pokemon['ThumbnailImage'],pokemon['number'],pokemon['height'],pokemon['weight']);
                 history.pushState(`/${pokemon['id']}`, '', `/${pokemon['id']}`);
                 PokeRoutes.createCard(pokemon_obj);
               })
@@ -98,17 +98,17 @@ window.onload=function(){
         });
     };
 
-    var searchListe = function(){
+    let searchListe = function(){
         if(document.getElementById("pokemonList")){
             document.getElementById("pokemonList").remove();
         }
-        var ul = document.createElement('ul');
+        let ul = document.createElement('ul');
         ul.setAttribute('id','pokemonList');
         document.getElementById('root').appendChild(ul);
-        var criteria = document.getElementById('searchCrit').value;
-        var string_verif = type_check_v1(document.getElementById('searchbar').value,"string");
+        let criteria = document.getElementById('searchCrit').value;
+        let string_verif = type_check_v1(document.getElementById('searchbar').value,"string");
         if(string_verif){
-            var search = document.getElementById('searchbar').value;
+            let search = document.getElementById('searchbar').value;
             if(document.getElementById('alert')){
                 document.getElementById('alert').remove();
             }
@@ -118,26 +118,26 @@ window.onload=function(){
             if (err !== null) {
                 alert('Impossible : ' + err);
             } else {
-             //   var pokemons = [];
+             //   let pokemons = [];
                 data.forEach( pokemon => {
-                    var criteriavalidation = false;
-                    var re = new RegExp(tolower(search), 'gi');
+                    let criteriavalidation = false;
+                    let re = new RegExp(tolower(search), 'gi');
                     if((criteria == "type" || criteria == "weakness") && tolower(prop_access(pokemon,"data."+criteria)).indexOf(tolower(search)) >= 0){
                         criteriavalidation = true;
                     } else if(criteria == "name" && tolower(prop_access(pokemon,"data.name")).match(re)) {
                         criteriavalidation = true;
                     }
                     if(search !== null && criteriavalidation == true){
-                        const li = document.createElement('li');
+                        let li = document.createElement('li');
                         li.setAttribute('class','item');
                         ul.appendChild(li);
-                        const div = document.createElement('div');
+                        let div = document.createElement('div');
                         li.appendChild(div);
-                        const label = document.createElement('label');
-                        const image = document.createElement('img');
+                        let label = document.createElement('label');
+                        let image = document.createElement('img');
                         div.appendChild(label);
     
-                        const name = document.createTextNode("Nom : " + prop_access(pokemon,"data.name"));
+                        let name = document.createTextNode("Nom : " + prop_access(pokemon,"data.name"));
                         image.setAttribute("src", prop_access(pokemon,"data.ThumbnailImage"));
                         image.setAttribute("width", "150");
                         image.setAttribute("height", "150");
@@ -146,7 +146,7 @@ window.onload=function(){
                         div.appendChild(image);
                         li.addEventListener('click', function (e) {
                           e.preventDefault();
-                          var pokemon_obj = new Pokemon(pokemon['name'],pokemon['abilities'],pokemon['type'],pokemon['weakness'],pokemon['ThumbnailImage'],pokemon['number'],pokemon['height'],pokemon['weight']);
+                          let pokemon_obj = new Pokemon(pokemon['name'],pokemon['abilities'],pokemon['type'],pokemon['weakness'],pokemon['ThumbnailImage'],pokemon['number'],pokemon['height'],pokemon['weight']);
                           history.pushState(`/${pokemon['id']}`, '', `/${pokemon['id']}`);
                           PokeRoutes.createCard(pokemon_obj);
     
@@ -163,7 +163,7 @@ window.onload=function(){
 
     };
 
-    const path = location.pathname;
+    let path = location.pathname;
     switch (path) {
       case '/':
         Affichage.affichageHome();
@@ -177,7 +177,7 @@ window.onload=function(){
         console.log('here');
       
         PokeRoutes.getInfo(path).then(result => {
-          var pokemon_obj = new Pokemon(result['name'],result['abilities'],result['type'],result['weakness'],result['ThumbnailImage'],result['number'],result['height'],result['weight']);
+          let pokemon_obj = new Pokemon(result['name'],result['abilities'],result['type'],result['weakness'],result['ThumbnailImage'],result['number'],result['height'],result['weight']);
           PokeRoutes.createCard(pokemon_obj);
         }  , reject => new Error(reject))
     }
@@ -192,7 +192,7 @@ window.onload=function(){
       }
       else {
         PokeRoutes.getInfo(e.state).then(result => {
-          var pokemon_obj = new Pokemon(result['name'],result['abilities'],result['type'],result['weakness'],result['ThumbnailImage'],result['number'],result['height'],result['weight']);
+          let pokemon_obj = new Pokemon(result['name'],result['abilities'],result['type'],result['weakness'],result['ThumbnailImage'],result['number'],result['height'],result['weight']);
           PokeRoutes.createCard(pokemon_obj);
         } , reject => new Error(reject))
       }
@@ -211,7 +211,7 @@ window.onload=function(){
             return object;
         }
     
-        const props = path.split('.');
+        let props = path.split('.');
         let property = object;
         props.forEach(function (prop) {
             if(!property.hasOwnProperty(prop)) {
@@ -226,7 +226,7 @@ window.onload=function(){
     function tolower(string) {
         if (string.length === 0) return string;
         if (typeof string == "object") {
-            for (var i = 0; i < string.length; i++) {
+            for (let i = 0; i < string.length; i++) {
                 string[i] = string[i].toLowerCase();
             }
             return string;
@@ -275,36 +275,36 @@ window.onload=function(){
 
 };
 
-var Affichage = {
+let Affichage = {
   affichageHome:function(){
-    var menu = document.createElement("div");
+    let menu = document.createElement("div");
     menu.setAttribute("class","menu");
-    var titre = document.createElement("h3");
-    var img = document.createElement('img');
+    let titre = document.createElement("h3");
+    let img = document.createElement('img');
     img.setAttribute("class","logo");
     img.src = 'img/image.png';
-    var content_h3 = document.createTextNode("Bienvenue sur le POKEDECK");
-    var button = document.createElement("button");
-    var button_afficher = document.createElement("button");
-    var content_button_afficher = document.createTextNode("Afficher tout les pokemons");
+    let content_h3 = document.createTextNode("Bienvenue sur le POKEDECK");
+    let button = document.createElement("button");
+    let button_afficher = document.createElement("button");
+    let content_button_afficher = document.createTextNode("Afficher tout les pokemons");
     button_afficher.setAttribute("class","style-button");
     button_afficher.setAttribute("id","show_button");
     button.setAttribute("class","style-button-search");
     button.setAttribute("id","search_button");
-    var br = document.createElement("br");
-    var br2 = document.createElement("br");
+    let br = document.createElement("br");
+    let br2 = document.createElement("br");
 
-    var div_search = document.createElement("div");
+    let div_search = document.createElement("div");
     
 
 
-    var searchbar = document.createElement("input");
-    var selectbar = document.createElement("select");
+    let searchbar = document.createElement("input");
+    let selectbar = document.createElement("select");
     selectbar.id = "searchCrit";
 
-    var list = ["name","type","weakness"];
-    for (var i = 0; i < list.length; i++) {
-        var option = document.createElement("option");
+    let list = ["name","type","weakness"];
+    for (let i = 0; i < list.length; i++) {
+        let option = document.createElement("option");
         option.value = list[i];
         option.text = list[i];
         selectbar.appendChild(option);
@@ -314,7 +314,7 @@ var Affichage = {
     titre.appendChild(content_h3);
     button_afficher.appendChild(content_button_afficher);
 
-    var element = document.getElementById("root");
+    let element = document.getElementById("root");
   
     
     element.appendChild(menu);

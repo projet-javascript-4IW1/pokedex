@@ -1,40 +1,40 @@
 import {Json} from './jsonmodule.js';
 
-var PokeRoutes = {
+let PokeRoutes = {
     createCard:function(pokemon) {
-       var createTextEl = function(tagName, text){
-            const el = document.createElement(tagName);
-            const txt = document.createTextNode(text);
+       let createTextEl = function(tagName, text){
+            let el = document.createElement(tagName);
+            let txt = document.createTextNode(text);
             el.appendChild(txt);
             return el;
           }
-          var appendChilds =function(parent, childs) {
+          let appendChilds =function(parent, childs) {
             childs.forEach(c => { parent.appendChild(c) });
             return parent;
           }
-        var  element = document.getElementById("root");
+        let  element = document.getElementById("root");
           if(element){
             element.innerHTML = '';
           }
           element = document.createElement('div');
           console.log(pokemon);
-          const card = document.createElement('div');
+          let card = document.createElement('div');
           card.classList.add('card');
-          var button_retour = document.createElement("button");
-          var content_button_retour = document.createTextNode("Retour");
+          let button_retour = document.createElement("button");
+          let content_button_retour = document.createTextNode("Retour");
   
-          const img = document.createElement('img');
+          let img = document.createElement('img');
           img.setAttribute('src', pokemon.getThumbnailImage());
   
-          const h1 = document.createTextNode(`${pokemon.getName()} - #${pokemon.getNumber()}`);
-          const infoWrap = document.createElement('div');
+          let h1 = document.createTextNode(`${pokemon.getName()} - #${pokemon.getNumber()}`);
+          let infoWrap = document.createElement('div');
           infoWrap.style.display = 'flex';
           infoWrap.style.flexDirection = 'column';
-          const abilitiesText = createTextEl('p', `Abilities : ${pokemon.getAbilities()}`);
-          const heightText = createTextEl('p',`Height : ${pokemon.getHeight()}`);
-          const weightText = createTextEl('p', `Weight : ${pokemon.getWeight()}`);
-          const typesText = createTextEl('p',`Types : ${pokemon.getType()}`);
-          const weaknessText = createTextEl('p', `Weakness : ${pokemon.getWeakness()}`);
+          let abilitiesText = createTextEl('p', `Abilities : ${pokemon.getAbilities()}`);
+          let heightText = createTextEl('p',`Height : ${pokemon.getHeight()}`);
+          let weightText = createTextEl('p', `Weight : ${pokemon.getWeight()}`);
+          let typesText = createTextEl('p',`Types : ${pokemon.getType()}`);
+          let weaknessText = createTextEl('p', `Weakness : ${pokemon.getWeakness()}`);
   
           card.appendChild(h1);
           card.appendChild(img);
@@ -44,7 +44,7 @@ var PokeRoutes = {
           element.appendChild(button_retour);
           element.appendChild(card);
           
-          const body = document.querySelector('body');
+          let body = document.querySelector('body');
           body.appendChild(element);
   
           button_retour.addEventListener("click", function(){
